@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Spotser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 30px 32px;
+      border-radius: 16px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+      width: 100%;
+      max-width: 440px;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      color: #111827;
+      margin-bottom: 24px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 12px 14px 12px 40px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+      resize: none;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: #2563eb;
+      outline: none;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7280;
+      pointer-events: none;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .error {
+      font-size: 12px;
+      color: #dc2626;
+      margin-top: 4px;
+    }
+
+    .success-popup {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 20px;
+      border-left: 5px solid #10b981;
+      display: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Contact Us 💬</h2>
+    <form id="contactForm">
+      
+      <div class="input-group">
+        <i>🧑</i>
+        <input type="text" name="name" id="name" placeholder="Your Name" required>
+      </div>
+
+      <div class="input-group">
+        <i>📧</i>
+        <input type="email" name="email" id="email" placeholder="Your Email" required>
+        <div id="emailError" class="error"></div>
+      </div>
+
+      <div class="input-group">
+        <i>💬</i>
+        <textarea name="message" id="message" placeholder="Your Message" rows="4" required></textarea>
+      </div>
+
+      <div class="input-group">
+        <i>⭐</i>
+        <input type="text" name="review" placeholder="Optional Review">
+      </div>
+
+      <button type="submit">Send Message</button>
+    </form>
+
+    <div id="popup" class="success-popup">
+      ✅ Your message has been sent!
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("contactForm");
+    const popup = document.getElementById("popup");
+    const emailInput = document.getElementById("email");
+    const emailError = document.getElementById("emailError");
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(email)) {
+        emailError.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      emailError.textContent = "";
+
+      const formData = new FormData(form);
+
+      fetch("/submit", {
+        method: "POST",
+        body: formData
+      }).then(() => {
+        popup.style.display = "block";
+        setTimeout(() => {
+          window.location.href = "/thankyou";
+        }, 2000);
+      }).catch(() => {
+        alert("Something went wrong while submitting the form.");
+      });
+    });
+  </script>
+
+</body>
+</html>

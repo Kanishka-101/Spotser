@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Submitted Entries - Spotser</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f9fafb;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 40px;
+      color: #111827;
+    }
+
+    h2 {
+      text-align: center;
+      color: #111827;
+      margin-bottom: 30px;
+    }
+
+    .entries-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .entry-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      transition: transform 0.2s;
+      position: relative;
+    }
+
+    .entry-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .entry-card strong {
+      color: #2563eb;
+      font-size: 18px;
+    }
+
+    .entry-meta {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .entry-message {
+      font-size: 15px;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .entry-review {
+      font-style: italic;
+      font-size: 14px;
+      color: #10b981;
+    }
+
+    .delete-form {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .delete-button {
+      background-color: transparent;
+      border: none;
+      color: #ef4444;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .delete-button:hover {
+      color: #dc2626;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 40px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .download-btn {
+      display: block;
+      text-align: center;
+      margin: 20px auto 0;
+      width: fit-content;
+      background-color: #10b981;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .download-btn:hover {
+      background-color: #059669;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📋 Submitted Entries</h2>
+
+  <div class="entries-container">
+    {% for entry in entries %}
+      <div class="entry-card">
+        <div><strong>{{ entry.name }}</strong></div>
+        <div class="entry-meta">{{ entry.email }}</div>
+        <div class="entry-message">💬 {{ entry.message }}</div>
+        <div class="entry-review">⭐ {{ entry.review or 'No review' }}</div>
+
+        {% if admin %}
+          <form class="delete-form" action="/delete/{{ loop.index0 }}" method="POST">
+            <button class="delete-button" type="submit">🗑</button>
+          </form>
+        {% endif %}
+      </div>
+    {% else %}
+      <p style="text-align:center;">No entries yet 😢</p>
+    {% endfor %}
+  </div>
+
+  <a class="download-btn" href="/download">⬇️ Download CSV</a>
+
+  {% if admin %}
+    <a class="back-link" href="/logout">Logout</a>
+  {% else %}
+    <a class="back-link" href="/login">Admin Login</a>
+  {% endif %}
+
+  <a class="back-link" href="/">← Back to Home</a>
+  <a class="back-link" href="/logout" style="color: #ef4444;">🔓 Logout</a>
+  
+
+</body>
+</html>
